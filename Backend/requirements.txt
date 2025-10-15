@@ -1,0 +1,42 @@
+# Core Framework
+fastapi          
+uvicorn
+
+# Database - PostgreSQL
+asyncpg       # Async PostgreSQL driver
+sqlalchemy    # ORM for database operations
+alembic          # Database migrations
+
+# Authentication & Security
+python-jose[cryptography]  # For creating and verifying JWT tokens
+passlib[bcrypt]            # For password hashing
+python-multipart           # For form data parsing
+bcrypt                  # Password hashing algorithm
+
+# WebSocket Support
+python-socketio  # Socket.IO server
+websockets         # WebSocket support
+
+# Environment Variables
+python-dotenv    # Load environment variables from .env file
+
+# Data Validation
+pydantic       # Data validation (comes with FastAPI but good to specify)
+pydantic-settings  # Settings management with Pydantic
+
+# Email Validation
+email-validator    # Validate email addresses
+
+# # Additional Utilities
+# python-dateutil==2.8.2    # Date/time utilities
+
+# Database connection pooling
+psycopg2-binary  # PostgreSQL adapter (for SQLAlchemy)
+
+PyJWT==2.8.0
+
+# Gemini AI with LangChain
+langchain
+langchain-google-genai
+google-generativeai
+langchain-core

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsEase API Diagnostic</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .test-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        input {
+            padding: 10px;
+            margin: 5px 0;
+            width: calc(100% - 22px);
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 WhatsEase API Diagnostic Tool</h1>
+    
+    <div class="test-section">
+        <h2>Step 1: Check Backend Connectivity</h2>
+        <button class="test-button" onclick="testRoot()">Test Root Endpoint</button>
+        <button class="test-button" onclick="testHealth()">Test Health Endpoint</button>
+        <button class="test-button" onclick="testCORS()">Test CORS</button>
+        <div id="connectivity-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 2: Test Registration</h2>
+        <label>Email:</label>
+        <input type="email" id="test-email" value="test@example.com" placeholder="Email">
+        
+        <label>Username:</label>
+        <input type="text" id="test-username" value="testuser123" placeholder="Username">
+        
+        <label>Password:</label>
+        <input type="password" id="test-password" value="test1234" placeholder="Password">
+        
+        <label>Full Name:</label>
+        <input type="text" id="test-fullname" value="Test User" placeholder="Full Name">
+        
+        <br><br>
+        <button class="test-button" onclick="testRegistration()">Test Registration API</button>
+        <div id="registration-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 3: Environment Info</h2>
+        <button class="test-button" onclick="showEnvironment()">Show Environment</button>
+        <div id="env-result"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+
+        function showLoading(elementId) {
+            document.getElementById(elementId).innerHTML = 
+                '<div class="result info"><span class="spinner"></span>Testing...</div>';
+        }
+
+        function showResult(elementId, success, message, details = null) {
+            const className = success ? 'success' : 'error';
+            let html = `<div class="result ${className}">`;
+            html += `<strong>${success ? '✓' : '✗'} ${message}</strong>\n`;
+            if (details) {
+                html += `\nDetails:\n${JSON.stringify(details, null, 2)}`;
+            }
+            html += '</div>';
+            document.getElementById(elementId).innerHTML = html;
+        }
+
+        async function testRoot() {
+            showLoading('connectivity-result');
+            try {
+                const response = await fetch(`${API_URL}/`);
+                const data = await response.json();
+                showResult('connectivity-result', true, 'Root endpoint working!', data);
+            } catch (error) {
+                showResult('connectivity-result', false, 'Cannot connect to root endpoint', {
+                    error: error.message,
+                    url: `${API_URL}/`,
+                    suggestion: 'Make sure backend is running on port 8000'
+                });
+            }
+        }
+
+        async function testHealth() {
+            showLoading('connectivity-result');
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                showResult('connectivity-result', true, 'Health endpoint working!', data);
+            } catch (error) {
+                showResult('connectivity-result', false, 'Health endpoint failed', {
+                    error: error.message,
+                    url: `${API_URL}/health`
+                });
+            }
+        }
+
+        async function testCORS() {
+            showLoading('connectivity-result');
+            try {
+                const response = await fetch(`${API_URL}/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const corsHeaders = {
+                    'access-control-allow-origin': response.headers.get('access-control-allow-origin'),
+                    'access-control-allow-credentials': response.headers.get('access-control-allow-credentials'),
+                    'access-control-allow-methods': response.headers.get('access-control-allow-methods'),
+                };
+                
+                const data = await response.json();
+                
+                showResult('connectivity-result', true, 'CORS is working!', {
+                    status: response.status,
+                    corsHeaders: corsHeaders,
+                    data: data
+                });
+            } catch (error) {
+                showResult('connectivity-result', false, 'CORS test failed', {
+                    error: error.message,
+                    type: error.name,
+                    suggestion: 'Check CORS configuration in main.py'
+                });
+            }
+        }
+
+        async function testRegistration() {
+            showLoading('registration-result');
+            
+            const email = document.getElementById('test-email').value;
+            const username = document.getElementById('test-username').value;
+            const password = document.getElementById('test-password').value;
+            const fullName = document.getElementById('test-fullname').value;
+
+            const userData = {
+                email: email,
+                username: username,
+                password: password,
+                full_name: fullName
+            };
+
+            console.log('Testing registration with:', userData);
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResult('registration-result', true, 'Registration successful!', data);
+                } else {
+                    showResult('registration-result', false, `Registration failed (${response.status})`, data);
+                }
+            } catch (error) {
+                showResult('registration-result', false, 'Registration request failed', {
+                    error: error.message,
+                    type: error.name,
+                    url: `${API_URL}/api/auth/register`,
+                    requestData: userData
+                });
+            }
+        }
+
+        function showEnvironment() {
+            const envInfo = {
+                'Current URL': window.location.href,
+                'API URL': API_URL,
+                'User Agent': navigator.userAgent,
+                'Online': navigator.onLine,
+                'Language': navigator.language,
+                'Platform': navigator.platform,
+                'Cookies Enabled': navigator.cookieEnabled
+            };
+            showResult('env-result', true, 'Environment Information', envInfo);
+        }
+
+        // Auto-test on load
+        window.addEventListener('load', () => {
+            setTimeout(testRoot, 500);
+        });
+    </script>
+</body>
+</html>
