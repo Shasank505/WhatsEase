@@ -14,7 +14,7 @@ A real-time chat application with AI bot integration, built with FastAPI (backen
 
 - ✅ **Real-time Messaging**: WebSocket-based instant communication
 - ✅ **User Authentication**: Secure JWT-based authentication with bcrypt password hashing
-- ✅ **AI Assistant Bot**: Automated responses using Google Gemini AI
+- ✅ **AI Assistant Bot**: Automated responses 
 - ✅ **Online Status**: Real-time user presence tracking
 - ✅ **Message History**: Persistent message storage with read receipts
 - ✅ **Modern UI**: Responsive React interface with Vite
