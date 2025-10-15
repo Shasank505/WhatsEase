@@ -21,9 +21,6 @@ A real-time chat application with AI bot integration, built with FastAPI (backen
 - ✅ **RESTful API**: Comprehensive API with automatic documentation
 - ✅ **Database ORM**: SQLAlchemy async ORM with PostgreSQL
 
-## 🎯 Demo
-
-🔗 **Live Demo**: [Coming Soon]
 
 ## 📋 Table of Contents
 
