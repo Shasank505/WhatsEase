@@ -22,50 +22,46 @@ class Settings(BaseSettings):
     """
     
     # Application Settings
-    app_name: str = "WhatsEase Chat"
-    app_version: str = "1.0.0"
-    debug: bool = True  # Set to False in production
+    app_name: str 
+    app_version: str 
+    debug: bool  # Set to False in production
     
     # Server Settings
-    host: str = "0.0.0.0"  # 0.0.0.0 means accessible from any network interface
-    port: int = 8000
+    host: str 
+    port: int 
     
     # Database Settings - PostgreSQL 
-    postgres_user: str = "postgres"
-    postgres_password: str = "7600"
-    postgres_host: str = "localhost"
-    postgres_port: int = 5432
-    postgres_db: str = "Whatsease_db1"
+    postgres_user: str 
+    postgres_password: str 
+    postgres_host: str 
+    postgres_port: int 
+    postgres_db: str 
     
     # Choose database type: "mongodb" or "postgresql"
-    database_type: str = "postgresql"  
+    database_type: str 
     
     # JWT Settings for Authentication
     # Secret key should be a random string - use: openssl rand -hex 32
-    secret_key: str = "your-secret-key-change-this-in-production-use-openssl-rand-hex-32"
-    algorithm: str = "HS256"  # HMAC with SHA-256 for JWT encoding
-    access_token_expire_minutes: int = 60 * 24 * 7  # 7 days
+    secret_key: str 
+    algorithm: str 
+    access_token_expire_minutes: int 
     
     # CORS Settings (Cross-Origin Resource Sharing)
     # This allows your frontend to communicate with your backend
-    cors_origins: List[str] = [
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://127.0.0.1:3000",
-    ]
+    cors_origins: List[str]
     
     # WebSocket Settings
-    websocket_ping_interval: int = 25  # Ping clients every 25 seconds
-    websocket_ping_timeout: int = 60   # Close connection if no response in 60s
+    websocket_ping_interval: int 
+    websocket_ping_timeout: int    # Close connection if no response in 60s
     
     # Bot Settings
-    bot_email: str = "bot@whatsease.com"
-    bot_name: str = "WhatsEase AI Assistant"
-    bot_response_delay: float = 0.5  # Simulate typing delay in seconds
+    bot_email: str 
+    bot_name: str 
+    bot_response_delay: float  # Simulate typing delay in seconds
     
     # Logging
-    log_level: str = "INFO"  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
-    log_file: str = "app.log"
+    log_level: str  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+    log_file: str
     
     @field_validator('cors_origins', mode='before')
     @classmethod
